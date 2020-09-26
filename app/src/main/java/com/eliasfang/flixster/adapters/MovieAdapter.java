@@ -18,10 +18,13 @@ import com.eliasfang.flixster.models.Movie;
 
 import java.util.List;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
     List<Movie> movies;
+
+    final int NORMAL = 0;
+    final int POPULAR = 1;
 
     public MovieAdapter(Context context, List<Movie> movies) {
         this.context = context;
@@ -31,26 +34,45 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     // Usually involves inflating a layout from XML and returning the holder
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d("MovieAdapter", "onCreateViewHolder");
-        View movieView = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
-        return new ViewHolder(movieView);
+        View movieView;
+        // Check movie type
+        if (viewType == NORMAL) {
+            movieView = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
+            return new ViewHolder(movieView);
+        }
+        movieView = LayoutInflater.from(context).inflate(R.layout.item_popular_movie, parent, false);
+        return new PopularViewHolder(movieView);
     }
 
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Log.d("MovieAdapter", "onBindViewHolder " + position);
         // Get the movie at the passed in position
         Movie movie = movies.get(position);
-        // Bind the movie data into the VH
-        holder.bind(movie);
+        // Bind the movie data into the VH or PVH
+        if (getItemViewType(position) == NORMAL) {
+            ((ViewHolder)holder).bind(movie);
+        } else if (getItemViewType(position) == POPULAR) {
+            ((PopularViewHolder)holder).bind(movie);
+        }
     }
 
     // Returns the total count of items in the list
     @Override
     public int getItemCount() {
         return movies.size();
+    }
+
+    // Returns the item view type
+    public int getItemViewType(int position) {
+        Movie movie = movies.get(position);
+        if (movie.getVoteAverage() >= 7.5) {
+            return POPULAR;
+        }
+        return NORMAL;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -79,7 +101,23 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 imageUrl = movie.getPosterPath();
             }
 
-            Glide.with(context).load(imageUrl).into(ivPoster);
+            Glide.with(context).load(imageUrl).override(342,513).placeholder(R.drawable.placeholder).into(ivPoster);
         }
+
+    }
+
+    public class PopularViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView ivBackdrop;
+
+        public PopularViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ivBackdrop = itemView.findViewById(R.id.ivBackdrop);
+        }
+
+        public void bind(Movie movie) {
+            Glide.with(context).load(movie.getBackdropPath()).placeholder(R.drawable.placeholder).into(ivBackdrop);
+        }
+
     }
 }
