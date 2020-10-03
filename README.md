@@ -12,12 +12,13 @@ Flixster is an app that allows users to browse movies from the [The Movie Databa
 
 #### BONUS
 
+- [X] Implement a shared element transition when user clicks into the details of a movie (1 point)
 - [ ] Trailers for popular movies are played automatically when the movie is selected (1 point).
   - [ ] When clicking on a popular movie (i.e. a movie voted for more than 7.5 stars) the video should be played immediately.
   - [ ] Less popular videos rely on the detailed page should show an image preview that can initiate playing a YouTube video.
 - [ ] Add a play icon overlay to popular movies to indicate that the movie can be played (1 point).
 - [ ] Apply the popular ButterKnife annotation library to reduce view boilerplate. (1 point)
-- [ ] Add a rounded corners for the images using the Glide transformations. (1 point)
+- [X] Add a rounded corners for the images using the Glide transformations. (1 point)
 
 ### App Walkthough GIF
 
@@ -27,6 +28,8 @@ Flixster is an app that allows users to browse movies from the [The Movie Databa
 
 - Ran into an issue with the YouTube videos not showing up, but I fixed this by updating the YouTube app on my test device.
 - Rating bar's rating was not showing up so I had to manually set the progress tint and progress background tint.
+- Had trouble trying to add multiple shared element transitions.
+- Will implement the rest of the stretch stories in the future.
 
 ## Open-source libraries used
 - [Android Async HTTP](https://github.com/codepath/CPAsyncHttpClient) - Simple asynchronous HTTP requests with JSON parsing
